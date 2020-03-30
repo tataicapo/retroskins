@@ -26,9 +26,9 @@ const manager = new TradeOfferManager({
 });
 
 const logInOptions = {
-	accountName: config.accountName,
-	password: config.password,
-	twoFactorCode: SteamTotp.generateAuthCode(config.sharedSecret)
+	accountName: accountName,
+	password: password,
+	twoFactorCode: SteamTotp.generateAuthCode(sharedSecret)
 };
 
 client.logOn(logInOptions);
@@ -43,7 +43,7 @@ client.on('loggedOn', () => {
 client.on('webSession', (sid, cookies) => {
 	manager.setCookies(cookies);
 	community.setCookies(cookies);
-	community.startConfirmationChecker(20000, config.identitySecret);
+	community.startConfirmationChecker(20000, identitySecret);
 	sendFloralShirt();
 });
 
