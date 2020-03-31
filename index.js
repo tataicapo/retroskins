@@ -7,6 +7,19 @@ var express = require('express');
 var app = express();
 
 var server_port = process.env.PORT || 8080
+var accountName, password, sharedSecret, identitySecret;
+try {
+	const config = require('./config');
+	accountName = config.accountName;
+	password = config.password;
+	sharedSecret = config.sharedSecret;
+	identitySecret = config.identitySecret;
+} catch (error) {
+	accountName = process.env.accountName;
+	password = process.env.password;
+	sharedSecret = process.env.sharedSecret;
+	identitySecret = process.env.identitySecret;
+}
 
 app.get('/', function (req, res) {
 	res.send('Hello World!');
@@ -25,9 +38,9 @@ const manager = new TradeOfferManager({
 });
 
 const logInOptions = {
-	accountName: process.env.accountName,
-	password: process.env.password,
-	twoFactorCode: SteamTotp.generateAuthCode(process.env.sharedSecret)
+	accountName: accountName,
+	password: password,
+	twoFactorCode: SteamTotp.generateAuthCode(sharedSecret)
 };
 
 client.logOn(logInOptions);
@@ -42,7 +55,7 @@ client.on('loggedOn', () => {
 client.on('webSession', (sid, cookies) => {
 	manager.setCookies(cookies);
 	community.setCookies(cookies);
-	community.startConfirmationChecker(20000, process.env.identitySecret);
+	community.startConfirmationChecker(20000, identitySecret);
 	sendFloralShirt();
 });
 
@@ -77,7 +90,7 @@ function sendFloralShirt() {
 		} else {
 			console.log('-loadInventory-true')
 			const offer = manager.createOffer('76561198864031631');
-			//console.log(inventory)
+			console.log(inventory)
 			inventory.forEach(function(item) {
 				if (item.assetid === '8507890831') {
 					offer.addMyItem(item);
