@@ -2,7 +2,7 @@ const SteamUser = require('steam-user');
 const SteamTotp = require('steam-totp');
 const SteamCommunity = require('steamcommunity');
 const TradeOfferManager = require('steam-tradeoffer-manager');
-const config = require('./config');
+//const config = require('./config');
 var express = require('express');
 var app = express();
 
